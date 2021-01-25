@@ -11,14 +11,18 @@
 
   <link rel="canonical" href="https://g14n.info/infinite-canvas"/>
   <link rel="icon" href="//g14n.info/favicon.ico" type="image/x-icon" />
+
+  <style>
+    /* The following CSS variables are filled with infinite-canvas defaults. */
+    infinite-canvas {
+      --infinite-canvas-background-color: #fefefe;
+    }
+  </style>
 </head>
 <body>
-  <infinite-canvas></infinite-canvas>
+  <infinite-canvas>
+  </infinite-canvas>
 
-  <script type="module">
-    import { InfiniteCanvas } from './infinite-canvas.js'
-
-    const infiniteCanvas = new InfiniteCanvas()
-  </script>
+  <script src="infinite-canvas.js"></script>
 </body>
 </html>
