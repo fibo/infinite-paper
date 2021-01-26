@@ -13,19 +13,26 @@
   <link rel="icon" href="https://g14n.info/favicon.ico" type="image/x-icon" />
 
   <style>
-    /* The following CSS variables are filled with infinite-canvas defaults. */
+    /* The following CSS variables are filled with default values. */
     infinite-canvas {
       --infinite-canvas-background-color: #fefefe;
+      --infinite-canvas-width: 100vw;
+      --infinite-canvas-height: 100vh;
     }
-
-    infinite-canvas[readonly] {
-      background-color: black;
+    window-frame {
+      --window-frame-box-shadow-color: rgba(0, 0, 0, 0.17);
     }
   </style>
 </head>
 <body>
   <infinite-canvas>
-    <canvas-origin></canvas-origin>
+    <window-frame
+      top="10"
+      left="10"
+      width="200"
+      height="400"
+      src="pages/welcome.html"
+    ></window-frame>
   </infinite-canvas>
 
   <script src="infinite-canvas.js"></script>
