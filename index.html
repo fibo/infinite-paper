@@ -10,17 +10,22 @@
   <meta name="viewport" content="width=device-width">
 
   <link rel="canonical" href="https://g14n.info/infinite-canvas"/>
-  <link rel="icon" href="//g14n.info/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="https://g14n.info/favicon.ico" type="image/x-icon" />
 
   <style>
     /* The following CSS variables are filled with infinite-canvas defaults. */
     infinite-canvas {
       --infinite-canvas-background-color: #fefefe;
     }
+
+    infinite-canvas[readonly] {
+      background-color: black;
+    }
   </style>
 </head>
 <body>
   <infinite-canvas>
+    <canvas-origin></canvas-origin>
   </infinite-canvas>
 
   <script src="infinite-canvas.js"></script>
