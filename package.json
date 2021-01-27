@@ -1,6 +1,6 @@
 {
   "name": "infinite-paper",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "is a Web Component",
   "main": "infinite-paper.js",
   "scripts": {
