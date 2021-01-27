@@ -1,20 +1,20 @@
 {
-  "name": "infinite-canvas",
+  "name": "infinite-paper",
   "version": "0.0.0",
   "description": "is a Web Component",
-  "main": "infinite-canvas.js",
+  "main": "infinite-paper.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fibo/infinite-canvas.git"
+    "url": "git+https://github.com/fibo/infinite-paper.git"
   },
   "keywords": [
     "web",
     "components",
     "infinite",
-    "canvas",
+    "paper",
     "endless",
     "paper",
     "design"
@@ -25,7 +25,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fibo/infinite-canvas/issues"
+    "url": "https://github.com/fibo/infinite-paper/issues"
   },
-  "homepage": "https://g14n.info/infinite-canvas"
+  "homepage": "https://g14n.info/infinite-paper"
 }

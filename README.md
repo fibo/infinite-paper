@@ -1,8 +1,37 @@
-# infinite-canvas
+# infinite-paper
 
 > is a Web Component
 
-## `<infinite-canvas>`
+[Usage](#usage) |
+[API](#api) |
+[License](#license) |
+
+## Usage
+
+Import it, for instance using a CDN
+
+```html
+<script src="https://unpkg.com/infinite-paper"></script>
+```
+
+Add a single *infinite-paper*: it will disable scroll and fill the whole viewport.
+Put also some *window-frame*, for example
+
+```html
+<infinite-paper>
+  <window-frame
+    top="10"
+    left="10"
+    width="200"
+    height="400"
+    src="https://www.npmjs.com/package/infinite-paper"
+  ></window-frame>
+</infinite-paper>
+```
+
+## API
+
+### `<infinite-paper>`
 
 HTML attributes:
 
@@ -10,9 +39,9 @@ HTML attributes:
 
 CSS variables:
 
-* *--infinite-canvas-background-color*: `#fefefe`
+* *--infinite-paper-background-color*: `#fefefe`
 
-## `<window-frame>`
+### `<window-frame>`
 
 HTML attributes:
 

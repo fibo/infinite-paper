@@ -1,7 +1,7 @@
 /**
- * InfiniteCanvas
+ * InfinitePaper
  */
-customElements.define('infinite-canvas', class InfiniteCanvas extends HTMLElement {
+customElements.define('infinite-paper', class InfinitePaper extends HTMLElement {
 constructor() {
   super();
 
@@ -9,7 +9,7 @@ constructor() {
   template.innerHTML = `
 <style>
   :host {
-    background-color: var(--infinite-canvas-background-color, #fefefe);
+    background-color: var(--infinite-paper-background-color, #fefefe);
     position: absolute;
     left: 0;
     top: 0;
@@ -118,7 +118,7 @@ onPointerup() {
 }
 
 onWheel(event) {
-  this.scale = this.scale - event.deltaY * Math.pow(10, -InfiniteCanvas.scalePrecision);
+  this.scale = this.scale - event.deltaY * Math.pow(10, -InfinitePaper.scalePrecision);
 }
 
 stopDragging() {
@@ -135,7 +135,7 @@ get scale() {
 
 set scale(value) {
   if (value > 0) {
-    this.setAttribute('scale', Number(value.toFixed(InfiniteCanvas.scalePrecision)));
+    this.setAttribute('scale', Number(value.toFixed(InfinitePaper.scalePrecision)));
   }
 }
 });
@@ -212,11 +212,11 @@ attributeChangedCallback(name, oldValue, newValue) {
   }
 }
 
-get canvas() {
+get paper() {
   const { parentNode } = this;
 
   if (parentNode) {
-    if (parentNode.tagName === 'INFINITE-CANVAS') {
+    if (parentNode.tagName === 'INFINITE-PAPER') {
       return parentNode;
     }
   }
@@ -227,10 +227,10 @@ get iframe() {
 }
 
 get scale() {
-  const { canvas } = this;
+  const { paper } = this;
 
-  if (canvas) {
-    return Number(canvas.getAttribute('scale')) || 1;
+  if (paper) {
+    return Number(paper.getAttribute('scale')) || 1;
   } else {
     return 1;
   }
