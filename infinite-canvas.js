@@ -37,12 +37,18 @@ static get observedAttributes() {
 attributeChangedCallback(name, oldValue, newValue) {
   switch (name) {
     case 'scale': {
-      this.querySelectorAll(':scope > window-frame').forEach((element) => {
-        const width = element.getAttribute('width');
-        const height = element.getAttribute('height');
+      this.windowFrames.forEach((element) => {
+        const wantedWidth = element.getAttribute('width');
+        const wantedHeight = element.getAttribute('height');
 
-        element.style.width = `${Math.round(width * newValue)}px`;
-        element.style.height = `${Math.round(height * newValue)}px`;
+        const width = Math.round(wantedWidth * newValue);
+        const height = Math.round(wantedHeight * newValue);
+
+        element.style.width = `${width}px`;
+        element.style.height = `${height}px`;
+
+        const iframe = element.shadowRoot.querySelector('iframe');
+        iframe.style.transform = `scale(${newValue})`;
       })
       break;
     }
@@ -54,6 +60,7 @@ connectedCallback() {
   document.body.style.overflow = 'hidden';
 
   this.addEventListener('pointerdown', this.onPointerdown);
+  this.addEventListener('pointerleave', this.onPointerleave);
   this.addEventListener('pointermove', this.onPointermove);
   this.addEventListener('pointerup', this.onPointerup);
   this.addEventListener('wheel', this.onWheel);
@@ -61,6 +68,7 @@ connectedCallback() {
 
 disconnectedCallback() {
   this.removeEventListener('pointerdown', this.onPointerdown);
+  this.removeEventListener('pointerleave', this.onPointerleave);
   this.removeEventListener('pointermove', this.onPointermove);
   this.removeEventListener('pointerup', this.onPointerup);
 }
@@ -90,17 +98,35 @@ onPointermove(event) {
       x: origin.x - pointerCoordinates.x + x,
       y: origin.y - pointerCoordinates.y + y
     };
-    // 2. Update pointer coordinates.
+    // 3. Apply to children nodes.
+    this.windowFrames.forEach((element) => {
+      element.style.left = `${this.origin.x}px`;
+      element.style.top = `${this.origin.y}px`;
+    })
+    // 3. Update pointer coordinates.
     this.pointerCoordinates = { x, y };
+
   }
 }
 
+onPointerleave() {
+  this.stopDragging();
+}
+
 onPointerup() {
-  this.isDragging = false;
+  this.stopDragging();
 }
 
 onWheel(event) {
   this.scale = this.scale - event.deltaY * Math.pow(10, -InfiniteCanvas.scalePrecision);
+}
+
+stopDragging() {
+  this.isDragging = false;
+}
+
+get windowFrames() {
+  return this.querySelectorAll(':scope > window-frame');
 }
 
 get scale() {
@@ -129,9 +155,12 @@ constructor() {
       --window-frame-box-shadow-color, rgba(0, 0, 0, 0.17)
     );
   }
+  :host > iframe {
+    transform-origin: 0px 0px;
+  }
 </style>
 
-<iframe width="100%" height="100%" frameborder="0"></iframe>
+<iframe frameborder="0"></iframe>
 `;
 
   this.attachShadow({mode: 'open'}).appendChild(template.content.cloneNode(true));
@@ -163,12 +192,14 @@ attributeChangedCallback(name, oldValue, newValue) {
 
     case 'width':
     case 'height': {
-      const { scale } = this;
+      const { iframe, scale } = this;
 
       const num = Math.round(newValue * scale);
 
       if (typeof num === 'number' && num >= 0) {
         this.style[name] = `${num}px`;
+        iframe.style.transform = `scale(${scale})`;
+        iframe[name] = newValue;
       }
 
       break;
