@@ -6,13 +6,11 @@
 
 HTML attributes:
 
-* *readonly*: `Boolean`
+* *scale*: `Number`
 
 CSS variables:
 
 * *--infinite-canvas-background-color*: `#fefefe`
-* *--infinite-canvas-width*: `100vw`
-* *--infinite-canvas-height*: `100vh`
 
 ## `<window-frame>`
 

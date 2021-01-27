@@ -13,8 +13,8 @@ constructor() {
     position: absolute;
     left: 0;
     top: 0;
-    width: var(--infinite-canvas-width, 100vw);
-    height: var(--infinite-canvas-width, 100vh);
+    width: 100vw;
+    height: 100vh;
   }
   ::slotted(window-frame) {
     position: absolute;
@@ -26,17 +26,37 @@ constructor() {
   this.attachShadow({mode: 'open'}).appendChild(template.content.cloneNode(true));
 }
 
+static get scalePrecision () {
+  return 3;
+}
+
 static get observedAttributes() {
-  return ['readonly'];
+  return ['scale'];
 }
 
 attributeChangedCallback(name, oldValue, newValue) {
+  switch (name) {
+    case 'scale': {
+      this.querySelectorAll(':scope > window-frame').forEach((element) => {
+        const width = element.getAttribute('width');
+        const height = element.getAttribute('height');
+
+        element.style.width = `${Math.round(width * newValue)}px`;
+        element.style.height = `${Math.round(height * newValue)}px`;
+      })
+      break;
+    }
+  }
 }
 
 connectedCallback() {
+  // Disable scroll.
+  document.body.style.overflow = 'hidden';
+
   this.addEventListener('pointerdown', this.onPointerdown);
   this.addEventListener('pointermove', this.onPointermove);
   this.addEventListener('pointerup', this.onPointerup);
+  this.addEventListener('wheel', this.onWheel);
 }
 
 disconnectedCallback() {
@@ -79,15 +99,17 @@ onPointerup() {
   this.isDragging = false;
 }
 
-get readonly() {
-  return this.hasAttribute('readonly')
+onWheel(event) {
+  this.scale = this.scale - event.deltaY * Math.pow(10, -InfiniteCanvas.scalePrecision);
 }
-set readonly(value) {
-  const isReadonly = Boolean(value);
-  if (isReadonly) {
-    this.setAttribute('readonly', '')
-  } else {
-    this.removeAttribute('readonly')
+
+get scale() {
+  return Number(this.getAttribute('scale')) || 1;
+}
+
+set scale(value) {
+  if (value > 0) {
+    this.setAttribute('scale', Number(value.toFixed(InfiniteCanvas.scalePrecision)));
   }
 }
 });
@@ -109,14 +131,21 @@ constructor() {
   }
 </style>
 
-<iframe width="375" height="812" frameborder="0" src="pages/welcome.html"></iframe>
+<iframe width="100%" height="100%" frameborder="0"></iframe>
 `;
 
   this.attachShadow({mode: 'open'}).appendChild(template.content.cloneNode(true));
 }
 
 static get observedAttributes() {
-  return ['top', 'left', 'width', 'height', 'src'];
+  return [
+    /* position */
+    'top', 'left',
+    /* dimension */
+    'width', 'height',
+    /* iframe URL */
+    'src'
+  ];
 }
 
 attributeChangedCallback(name, oldValue, newValue) {
@@ -131,16 +160,20 @@ attributeChangedCallback(name, oldValue, newValue) {
 
       break;
     }
+
     case 'width':
     case 'height': {
-      const num = Math.round(newValue);
+      const { scale } = this;
+
+      const num = Math.round(newValue * scale);
 
       if (typeof num === 'number' && num >= 0) {
-        this.iframe[name] = num;
+        this.style[name] = `${num}px`;
       }
 
       break;
     }
+
     case 'src': {
       this.iframe.src = newValue;
       break;
@@ -148,7 +181,27 @@ attributeChangedCallback(name, oldValue, newValue) {
   }
 }
 
+get canvas() {
+  const { parentNode } = this;
+
+  if (parentNode) {
+    if (parentNode.tagName === 'INFINITE-CANVAS') {
+      return parentNode;
+    }
+  }
+}
+
 get iframe() {
   return this.shadowRoot.querySelector('iframe');
+}
+
+get scale() {
+  const { canvas } = this;
+
+  if (canvas) {
+    return Number(canvas.getAttribute('scale')) || 1;
+  } else {
+    return 1;
+  }
 }
 });
