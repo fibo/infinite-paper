@@ -21,11 +21,11 @@
   ],
   "author": {
     "name": "Gianluca Casati",
-    "url": "http://g14n.info"
+    "url": "https://fibo.github.io"
   },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fibo/infinite-paper/issues"
   },
-  "homepage": "https://g14n.info/infinite-paper"
+  "homepage": "https://fibo.github.io/infinite-paper"
 }

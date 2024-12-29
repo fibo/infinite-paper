@@ -8,12 +8,6 @@
 
 ## Usage
 
-Import it, for instance using a CDN
-
-```html
-<script src="https://unpkg.com/infinite-paper"></script>
-```
-
 Add a single *infinite-paper*: it will disable scroll and fill the whole viewport.
 Put also some *window-frame*, for example
 
@@ -57,4 +51,4 @@ CSS variables:
 
 ## License
 
-[MIT](http://g14n.info/mit-license)
+[MIT](https://fibo.github.io/mit-license)
