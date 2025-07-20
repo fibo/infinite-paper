@@ -1,6 +1,6 @@
 # infinite-paper
 
-> is a Web Component
+> Web Components for design sketches
 
 [Usage](#usage) |
 [API](#api) |
@@ -18,7 +18,7 @@ Put also some *window-frame*, for example
     left="10"
     width="200"
     height="400"
-    src="https://www.npmjs.com/package/infinite-paper"
+    src="https://www.example.com/page.html"
   ></window-frame>
 </infinite-paper>
 ```
