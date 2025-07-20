@@ -65,72 +65,53 @@ class InfinitePaper extends HTMLElement {
 	connectedCallback() {
 		// Disable scroll.
 		document.body.style.overflow = 'hidden';
-
-		this.addEventListener('pointerdown', this.onPointerdown);
-		this.addEventListener('pointerleave', this.onPointerleave);
-		this.addEventListener('pointermove', this.onPointermove);
-		this.addEventListener('pointerup', this.onPointerup);
-		this.addEventListener('wheel', this.onWheel);
+		for (const eventType of ['pointerdown', 'pointerleave', 'pointermove', 'pointerup', 'wheel'])
+			this.addEventListener(eventType, this);
 	}
 
-	disconnectedCallback() {
-		this.removeEventListener('pointerdown', this.onPointerdown);
-		this.removeEventListener('pointerleave', this.onPointerleave);
-		this.removeEventListener('pointermove', this.onPointermove);
-		this.removeEventListener('pointerup', this.onPointerup);
-	}
+	handleEvent(event) {
+		if (event.type === 'pointerdown') {
+			const {clientX, clientY} = event;
+			const x = Math.round(clientX);
+			const y = Math.round(clientY);
 
-	onPointerdown(event) {
-		const {clientX, clientY} = event;
-		const x = Math.round(clientX);
-		const y = Math.round(clientY);
-
-		this.isDragging = true;
-		this.pointerCoordinates = {x, y};
-	}
-
-	onPointermove(event) {
-		const {
-			isDragging,
-			origin = {x: 0, y: 0},
-			pointerCoordinates,
-		} = this;
-		const {clientX, clientY} = event;
-		const x = Math.round(clientX);
-		const y = Math.round(clientY);
-
-		if (isDragging) {
-			// Translate origin.
-			this.origin = {
-				x: origin.x - pointerCoordinates.x + x,
-				y: origin.y - pointerCoordinates.y + y,
-			};
-			// Apply to children nodes.
-			this.windowFrames.forEach((element) => {
-				element.style.left = `${this.origin.x}px`;
-				element.style.top = `${this.origin.y}px`;
-			});
-			// Update pointer coordinates.
+			this.isDragging = true;
 			this.pointerCoordinates = {x, y};
 		}
-	}
 
-	onPointerleave() {
-		this.stopDragging();
-	}
+		if (event.type === 'pointerleave' || event.type === 'pointerup') {
+			this.isDragging = false;
+		}
 
-	onPointerup() {
-		this.stopDragging();
-	}
+		if (event.type === 'pointermove') {
+			const {
+				isDragging,
+				origin = {x: 0, y: 0},
+				pointerCoordinates,
+			} = this;
+			const {clientX, clientY} = event;
+			const x = Math.round(clientX);
+			const y = Math.round(clientY);
 
-	onWheel(event) {
-		this.scale =
-			this.scale -
-			event.deltaY * Math.pow(10, -InfinitePaper.scalePrecision);
-	}
+			if (isDragging) {
+				// Translate origin.
+				this.origin = {
+					x: origin.x - pointerCoordinates.x + x,
+					y: origin.y - pointerCoordinates.y + y
+				};
+				// Apply to children nodes.
+				this.windowFrames.forEach((element) => {
+					element.style.left = `${this.origin.x}px`;
+					element.style.top = `${this.origin.y}px`;
+				});
+				// Update pointer coordinates.
+				this.pointerCoordinates = {x, y};
+			}
+		}
 
-	stopDragging() {
-		this.isDragging = false;
+		if (event.type === 'wheel' && event.metaKey) {
+			this.scale = this.scale - event.deltaY * Math.pow(10, -InfinitePaper.scalePrecision);
+		}
 	}
 
 	get windowFrames() {
@@ -143,10 +124,7 @@ class InfinitePaper extends HTMLElement {
 
 	set scale(value) {
 		if (value <= 0) return;
-		this.setAttribute(
-			'scale',
-			Number(value.toFixed(InfinitePaper.scalePrecision))
-		);
+		this.setAttribute('scale', Number(value.toFixed(InfinitePaper.scalePrecision)));
 	}
 }
 
